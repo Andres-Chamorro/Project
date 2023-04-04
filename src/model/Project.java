@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import model.Project.TipoProject;
 
 public class Project {
     private String name;
@@ -31,9 +32,9 @@ public class Project {
     }
 
     public enum TipoProject {
-        Desarrollo,
-        Mantenimiento,
-        Despliegue
+        DESARROLLO,
+        MANTENIMIENTO,
+        DESPLIEGUE
     }
 
     public String getClientName() {

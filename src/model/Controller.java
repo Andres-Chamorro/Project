@@ -17,10 +17,8 @@ public class Controller {
         if (numProjects < 10) {
             projects[numProjects] = project;
             numProjects++;
-            System.out.println("Proyecto agregado exitosamente");
             return true;
         } else {
-            System.out.println("No se puede agregar más proyectos");
             return false;
         }
     }

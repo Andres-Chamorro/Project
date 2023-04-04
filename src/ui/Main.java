@@ -2,6 +2,7 @@ package ui;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.io.Reader;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Calendar;
@@ -49,9 +50,6 @@ public class Main {
         switch (option) {
             case 1:
                 createProject();
-				System.out.println("");
-                System.out.println("'Proyecto registrado correctamente'");
-				System.out.println("");
                 break;
             case 2:
                 searchProjectsBeforeDate();
@@ -80,40 +78,70 @@ public class Main {
         return option;
     }
 
-    public static void createProject() {
-        Scanner scanner = new Scanner(System.in);
+    public void createProject() {
+		reader.nextLine();
+
         System.out.println("Ingrese el nombre del proyecto:");
-        String name = scanner.nextLine();
+        String name = reader.nextLine();
 
         System.out.println("Ingrese el nombre del cliente:");
-        String clientName = scanner.nextLine();
+        String clientName = reader.nextLine();
 
         System.out.println("Ingrese la fecha de inicio (DD/MM/AAAA):");
-        String initialDateString = scanner.nextLine();
+        String initialDateString = reader.nextLine();
         Calendar initialDate = parseDate(initialDateString);
 
         System.out.println("Ingrese la fecha de finalización (DD/MM/AAAA):");
-        String finalDateString = scanner.nextLine();
+        String finalDateString = reader.nextLine();
         Calendar finalDate = parseDate(finalDateString);
 
-        System.out.println("Ingrese el valor total del proyecto:");
-        double value = scanner.nextDouble();
-        scanner.nextLine(); // limpiar el scanner
+		if (finalDate.before(initialDate)) {
+			System.out.println("");
+			System.out.println("La fecha de finalización debe ser mayor o igual que la fecha de inicio.");
+			return; // Salir del método sin crear el proyecto
+		}else{
+			System.out.println("Ingrese el valor total del proyecto:");
+			double value = reader.nextDouble();
+			reader.nextLine(); // limpiar el scanner
 
-        System.out.println("Ingrese el tipo de proyecto (Desarrollo, Mantenimiento o Despliegue):");
-        String projectType = scanner.nextLine();
-        TipoProject tipo = TipoProject.valueOf(projectType);
+			System.out.println("Ingrese el tipo de proyecto:");
+			System.out.println("1. Desarrollo");
+			System.out.println("2. Mantenimiento");
+			System.out.println("3. Despliegue ");
+		
+			int tipoProyecto = reader.nextInt();
+		
+			TipoProject tipo = null;
+		
+			switch (tipoProyecto) {
+				case 1:
+					tipo = TipoProject.DESARROLLO;
+					break;
+				case 2:
+					tipo = TipoProject.MANTENIMIENTO;
+					break;
+				case 3:
+					tipo = TipoProject.DESPLIEGUE;
+					break;
+				default:
+					System.out.println("Opción inválida");
+			}
+		
+			Project project = new Project(name, clientName, initialDate, finalDate, value, tipo);
+			projects[numProjects] = project;
+			numProjects++;
 
-        Project project = new Project(name, clientName, initialDate, finalDate, value, tipo);
-        projects[numProjects] = project;
-        numProjects++;
+			System.out.println("");
+			System.out.println("Proyecto registrado correctamente");
+			System.out.println("");
+		
+		}
     }
 
 
 	public void searchProjectsBeforeDate() {
-		Scanner scanner = new Scanner(System.in);
 		System.out.println("Ingrese la fecha (DD/MM/AAAA):");
-		String dateString = scanner.nextLine();
+		String dateString = reader.next();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Calendar date = Calendar.getInstance();
 		try {
@@ -161,9 +189,8 @@ public class Main {
 	}
 	
 	public void searchProjectsAfterDate() {
-		Scanner scanner = new Scanner(System.in);
 		System.out.println("Ingrese la fecha (DD/MM/AAAA):");
-		String dateString = scanner.nextLine();
+		String dateString = reader.next();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Calendar date = Calendar.getInstance();
 		try {
